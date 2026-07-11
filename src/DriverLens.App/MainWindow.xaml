@@ -1,0 +1,15 @@
+<ui:FluentWindow x:Class="DriverLens.App.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 Title="DriverLens"
+                 Width="900"
+                 Height="600"
+                 WindowStartupLocation="CenterScreen">
+    <Grid Margin="32">
+        <StackPanel VerticalAlignment="Center">
+            <TextBlock FontSize="32" FontWeight="SemiBold" Text="DriverLens" />
+            <TextBlock Margin="0,12,0,0" FontSize="18" Text="Phase 0 scaffold" />
+        </StackPanel>
+    </Grid>
+</ui:FluentWindow>
