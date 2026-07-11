@@ -1,12 +1,12 @@
 # Roadmap
 
-## Phase 0 — Scaffolding (this prompt)
-Solution structure, WPF-UI shell, docs skeleton, git init.
+## Phase 0 — Scaffolding
+- [x] Solution structure, WPF-UI shell, docs skeleton, git init.
 
 ## Phase 1 — Scanner + Matching MVP
-- SetupAPI wrapper (device enumeration, HWID/Compatible ID chains, current driver info).
-- Compatibility & Risk Engine implementing the 6-step ranking against a local, hand-authored JSON fixture (no real GitHub index yet).
-- Read-only WPF-UI list: grouped by category, status badges, Current → Proposed expandable detail. No install actions yet.
+- [x] SetupAPI wrapper (device enumeration, HWID/Compatible ID chains, current driver info).
+- [x] Compatibility & Risk Engine implementing the 6-step ranking against a local, hand-authored JSON fixture (no real GitHub index yet).
+- [x] Read-only WPF-UI list: grouped by category, status badges, Current → Proposed expandable detail. No install actions yet.
 
 ## Phase 2 — Signed index + sync
 - Index shard format finalized, Ed25519 signing script, public key embedded in client.

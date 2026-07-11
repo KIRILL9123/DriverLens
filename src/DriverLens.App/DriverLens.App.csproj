@@ -3,10 +3,16 @@
     <ProjectReference Include="..\DriverLens.Core\DriverLens.Core.csproj" />
     <ProjectReference Include="..\DriverLens.Data\DriverLens.Data.csproj" />
     <ProjectReference Include="..\DriverLens.Install\DriverLens.Install.csproj" />
+    <ProjectReference Include="..\DriverLens.Scanner\DriverLens.Scanner.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="WPF-UI" Version="4.3.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\fixtures\sample-index.json" Link="fixtures\sample-index.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <OutputType>WinExe</OutputType>

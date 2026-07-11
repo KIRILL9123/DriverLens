@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "id": "contoso-net-3.2.1.0",
+      "hwids": ["PCI\\VEN_1414&DEV_00B7&SUBSYS_00001414&REV_02", "PCI\\VEN_1414&DEV_00B7"],
+      "compatible_ids": ["PCI\\VEN_1414&DEV_00B7&CC_020000"],
+      "provider": "Contoso",
+      "version": "3.2.1.0",
+      "release_date": "2026-04-10",
+      "os": { "min_build": 19041, "arch": ["x64"] },
+      "source": {
+        "url": "https://drivers.contoso.example/net/3.2.1.0.cab",
+        "sha256": "3b1e9f4a2c7d0e8b5a6f1c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f",
+        "authenticode_publisher": "Contoso Networking Inc"
+      },
+      "risk_level": "low",
+      "known_good": true
+    },
+    {
+      "id": "contoso-net-3.5.0.0-regressed",
+      "hwids": ["PCI\\VEN_1414&DEV_00B7&SUBSYS_00001414&REV_02", "PCI\\VEN_1414&DEV_00B7"],
+      "compatible_ids": [],
+      "provider": "Contoso",
+      "version": "3.5.0.0",
+      "release_date": "2026-06-01",
+      "os": { "min_build": 19041, "arch": ["x64"] },
+      "source": {
+        "url": "https://drivers.contoso.example/net/3.5.0.0.cab",
+        "sha256": "9fa2b1c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2",
+        "authenticode_publisher": "Contoso Networking Inc"
+      },
+      "risk_level": "medium",
+      "known_good": false
+    },
+    {
+      "id": "contoso-net-2.0.0.0-unsigned",
+      "hwids": [],
+      "compatible_ids": ["PCI\\VEN_1414&DEV_00B7&CC_020000"],
+      "provider": "Unknown",
+      "version": "2.0.0.0",
+      "release_date": "2024-01-01",
+      "os": { "min_build": 10240, "arch": ["x64", "x86"] },
+      "source": {
+        "url": "https://random-driver-site.example/old.exe",
+        "sha256": "aaaa1111bbbb2222cccc3333dddd4444eeee5555ffff6666aaaa7777bbbb8888",
+        "authenticode_publisher": null
+      },
+      "risk_level": "high",
+      "known_good": true
+    },
+    {
+      "id": "contoso-display-old-os-only",
+      "hwids": ["PCI\\VEN_10DE&DEV_2782&SUBSYS_00000000&REV_A1"],
+      "compatible_ids": [],
+      "provider": "Contoso",
+      "version": "1.0.0.0",
+      "release_date": "2023-01-01",
+      "os": { "min_build": 99999, "arch": ["x64"] },
+      "source": {
+        "url": "https://drivers.contoso.example/display/1.0.0.0.cab",
+        "sha256": "1111aaaa2222bbbb3333cccc4444dddd5555eeee6666ffff7777aaaa8888bbbb",
+        "authenticode_publisher": "Contoso Display Corp"
+      },
+      "risk_level": "low",
+      "known_good": true
+    }
+  ]
+}

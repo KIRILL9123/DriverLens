@@ -23,5 +23,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\DriverLens.Core\DriverLens.Core.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Include="..\..\fixtures\sample-index.json" Link="fixtures\sample-index.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
