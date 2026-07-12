@@ -186,17 +186,24 @@ public sealed class DriverInstallService : IInstallService
         }
         finally
         {
-            // Clean up temp session directory
-            try
+            // Clean up temp session directory only on success, preserve on failure for diagnostics
+            if (result == InstallResult.Success)
             {
-                if (Directory.Exists(tempSessionDir))
+                try
                 {
-                    Directory.Delete(tempSessionDir, recursive: true);
+                    if (Directory.Exists(tempSessionDir))
+                    {
+                        Directory.Delete(tempSessionDir, recursive: true);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Failed to delete temp session dir: {ex.Message}");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to delete temp session dir: {ex.Message}");
+                details += $"\nВременные файлы сохранены в: {tempSessionDir}";
             }
 
             // Write operation log
