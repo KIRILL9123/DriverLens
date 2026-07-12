@@ -34,11 +34,17 @@ public sealed class ExpandCabExtractor : ICabExtractor
             throw new InvalidOperationException("Failed to start expand.exe process.");
         }
 
+        // Read stdout and stderr asynchronously in the background to prevent stream buffer deadlocks
+        var stdoutTask = process.StandardOutput.ReadToEndAsync();
+        var stderrTask = process.StandardError.ReadToEndAsync();
+
         await process.WaitForExitAsync();
+
+        var stdout = await stdoutTask;
+        var stderr = await stderrTask;
         
         if (process.ExitCode != 0)
         {
-            var stderr = await process.StandardError.ReadToEndAsync();
             throw new InvalidOperationException($"expand.exe failed with exit code {process.ExitCode}. Error: {stderr}");
         }
 

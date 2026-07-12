@@ -27,10 +27,13 @@ public class PnpUtilWrapper
             throw new InvalidOperationException("Failed to start pnputil.exe process.");
         }
 
+        var stdoutTask = process.StandardOutput.ReadToEndAsync();
+        var stderrTask = process.StandardError.ReadToEndAsync();
+
         await process.WaitForExitAsync();
 
-        var stdout = await process.StandardOutput.ReadToEndAsync();
-        var stderr = await process.StandardError.ReadToEndAsync();
+        var stdout = await stdoutTask;
+        var stderr = await stderrTask;
 
         if (process.ExitCode != 0)
         {
@@ -64,10 +67,13 @@ public class PnpUtilWrapper
             throw new InvalidOperationException("Failed to start pnputil.exe process for driver installation.");
         }
 
+        var stdoutTask = process.StandardOutput.ReadToEndAsync();
+        var stderrTask = process.StandardError.ReadToEndAsync();
+
         await process.WaitForExitAsync();
 
-        var stdout = await process.StandardOutput.ReadToEndAsync();
-        var stderr = await process.StandardError.ReadToEndAsync();
+        var stdout = await stdoutTask;
+        var stderr = await stderrTask;
         var combined = $"{stdout}\n{stderr}".Trim();
 
         return (process.ExitCode, combined);
