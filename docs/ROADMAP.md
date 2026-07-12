@@ -13,10 +13,13 @@
 - [x] SQLite local cache, background sync with ETag/If-Modified-Since, instant-first-paint from cache.
 
 ## Phase 3 — Install pipeline
-- Preflight: admin check, SHA-256 verify, Authenticode/cert-chain verify.
-- Snapshot: `pnputil /export-driver` + metadata snapshot store.
-- WMI restore point (supplementary) + explicit warning if System Restore is disabled.
-- `pnputil /add-driver /install`, device-state verification, structured operation log.
+- [x] Preflight: admin check, SHA-256 verify (Authenticode/cert-chain verify deferred to Phase 3.5).
+- [x] Snapshot: `pnputil /export-driver` + metadata snapshot store.
+- [x] WMI restore point (supplementary) + explicit warning if System Restore is disabled.
+- [x] `pnputil /add-driver /install`, device-state verification, structured operation log.
+
+## Phase 3.5 — Authenticode/.cat verification (deferred)
+- WinVerifyTrust-based certificate chain verification of downloaded packages, closing the gap noted in docs/ARCHITECTURE.md.
 
 ## Phase 4 — Rollback service
 - Standalone rollback: reinstall snapshotted INF, re-enumerate device, log outcome.

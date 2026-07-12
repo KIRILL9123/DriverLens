@@ -202,12 +202,126 @@
                                                                             </Style>
                                                                         </StackPanel.Style>
                                                                         <TextBlock Text="{Binding ProposedDriverText}" FontSize="13" Foreground="#DDFFFFFF" FontWeight="SemiBold" />
+                                                                        
+                                                                        <Grid Margin="0,8,0,0">
+                                                                            <!-- 1. "Обновить" Button -->
+                                                                            <ui:Button Content="Обновить" 
+                                                                                       Icon="ArrowDownload24" 
+                                                                                       Appearance="Primary"
+                                                                                       Command="{Binding DataContext.UpdateDeviceCommand, RelativeSource={RelativeSource AncestorType=ui:FluentWindow}}"
+                                                                                       CommandParameter="{Binding}"
+                                                                                       Height="32">
+                                                                                <ui:Button.Style>
+                                                                                    <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
+                                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                                        <Style.Triggers>
+                                                                                            <DataTrigger Binding="{Binding IsInstalling}" Value="True">
+                                                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                                                            </DataTrigger>
+                                                                                            <DataTrigger Binding="{Binding InstallSucceeded}" Value="True">
+                                                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                                                            </DataTrigger>
+                                                                                            <DataTrigger Binding="{Binding Status}" Value="{x:Static core:MatchStatus.UpToDate}">
+                                                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                                                            </DataTrigger>
+                                                                                        </Style.Triggers>
+                                                                                    </Style>
+                                                                                </ui:Button.Style>
+                                                                            </ui:Button>
+
+                                                                            <!-- 2. Installation Progress View -->
+                                                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                                                <StackPanel.Style>
+                                                                                    <Style TargetType="StackPanel">
+                                                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                                                        <Style.Triggers>
+                                                                                            <DataTrigger Binding="{Binding IsInstalling}" Value="True">
+                                                                                                <Setter Property="Visibility" Value="Visible" />
+                                                                                            </DataTrigger>
+                                                                                        </Style.Triggers>
+                                                                                    </Style>
+                                                                                </StackPanel.Style>
+                                                                                <ui:ProgressRing IsIndeterminate="True" Width="18" Height="18" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                                                                <TextBlock Text="{Binding InstallProgressText}" FontSize="12" Foreground="#88FFFFFF" VerticalAlignment="Center" />
+                                                                            </StackPanel>
+
+                                                                            <!-- 3. Success Message -->
+                                                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                                                <StackPanel.Style>
+                                                                                    <Style TargetType="StackPanel">
+                                                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                                                        <Style.Triggers>
+                                                                                            <DataTrigger Binding="{Binding InstallSucceeded}" Value="True">
+                                                                                                <Setter Property="Visibility" Value="Visible" />
+                                                                                            </DataTrigger>
+                                                                                        </Style.Triggers>
+                                                                                    </Style>
+                                                                                </StackPanel.Style>
+                                                                                <ui:SymbolIcon Symbol="CheckmarkCircle24" Foreground="Green" Margin="0,0,6,0" VerticalAlignment="Center" />
+                                                                                <TextBlock Text="Обновлен успешно" Foreground="Green" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                                                            </StackPanel>
+
+                                                                            <!-- 4. Failure Message -->
+                                                                            <StackPanel VerticalAlignment="Center">
+                                                                                <StackPanel.Style>
+                                                                                    <Style TargetType="StackPanel">
+                                                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                                                        <Style.Triggers>
+                                                                                            <DataTrigger Binding="{Binding InstallFailed}" Value="True">
+                                                                                                <Setter Property="Visibility" Value="Visible" />
+                                                                                            </DataTrigger>
+                                                                                        </Style.Triggers>
+                                                                                    </Style>
+                                                                                </StackPanel.Style>
+                                                                                <StackPanel Orientation="Horizontal">
+                                                                                    <ui:SymbolIcon Symbol="ErrorCircle24" Foreground="Red" Margin="0,0,6,0" VerticalAlignment="Center" />
+                                                                                    <TextBlock Text="Ошибка" Foreground="Red" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                                                                    <ui:Button Content="Детали" 
+                                                                                               Appearance="Transparent" 
+                                                                                               Padding="4,2" 
+                                                                                               Margin="8,0,0,0" 
+                                                                                               FontSize="11" 
+                                                                                               Click="ToggleDetails_Click" />
+                                                                                </StackPanel>
+                                                                            </StackPanel>
+                                                                        </Grid>
+
+                                                                        <!-- Details display -->
+                                                                        <Border BorderThickness="1" 
+                                                                                BorderBrush="#33FF0000" 
+                                                                                Background="#11FF0000" 
+                                                                                CornerRadius="4" 
+                                                                                Padding="8" 
+                                                                                Margin="0,8,0,0">
+                                                                            <Border.Style>
+                                                                                <Style TargetType="Border">
+                                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                                    <Style.Triggers>
+                                                                                        <MultiDataTrigger>
+                                                                                            <MultiDataTrigger.Conditions>
+                                                                                                <Condition Binding="{Binding InstallFailed}" Value="True" />
+                                                                                                <Condition Binding="{Binding ShowDetailsExpanded}" Value="True" />
+                                                                                            </MultiDataTrigger.Conditions>
+                                                                                            <Setter Property="Visibility" Value="Visible" />
+                                                                                        </MultiDataTrigger>
+                                                                                    </Style.Triggers>
+                                                                                </Style>
+                                                                            </Border.Style>
+                                                                            <ScrollViewer MaxHeight="100" VerticalScrollBarVisibility="Auto">
+                                                                                <TextBlock Text="{Binding InstallDetails}" 
+                                                                                           FontSize="11" 
+                                                                                           Foreground="#FF8888" 
+                                                                                           TextWrapping="Wrap" 
+                                                                                           FontFamily="Consolas" />
+                                                                            </ScrollViewer>
+                                                                        </Border>
                                                                     </StackPanel>
                                                                 </Grid>
                                                                 
                                                                 <!-- Match Reason and Class Warning -->
                                                                 <TextBlock Text="Status Details:" FontSize="11" FontWeight="Bold" Foreground="#66FFFFFF" Margin="0,12,0,2" />
                                                                 <TextBlock Text="{Binding Reason}" FontSize="12" Foreground="#4A90E2" TextWrapping="Wrap" />
+                                                                
                                                             </StackPanel>
                                                         </Border>
                                                     </Grid>
@@ -222,5 +336,8 @@
                 </ScrollViewer>
             </Grid>
         </Grid>
+        
+        <!-- ContentDialogHost for ContentDialogs -->
+        <ui:ContentDialogHost x:Name="RootContentDialogPresenter" Grid.Row="0" Grid.RowSpan="2" />
     </Grid>
 </ui:FluentWindow>

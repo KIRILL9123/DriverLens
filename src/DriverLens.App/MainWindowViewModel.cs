@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using DriverLens.Core;
 
 namespace DriverLens.App;
@@ -15,6 +17,8 @@ public sealed class MainWindowViewModel : ObservableObject
     private readonly IMatchingEngine _matchingEngine;
     private readonly ILocalCacheStore _cacheStore;
     private readonly IIndexSyncService _syncService;
+    private readonly IInstallService _installService;
+    private readonly IRestorePointService _restorePointService;
 
     private bool _isLoading;
     public bool IsLoading
@@ -32,6 +36,10 @@ public sealed class MainWindowViewModel : ObservableObject
 
     public ObservableCollection<DeviceGroupViewModel> Groups { get; } = new();
 
+    public IAsyncRelayCommand<DeviceItemViewModel> UpdateDeviceCommand { get; }
+
+    public Func<DeviceItemViewModel, bool, Task<bool>>? ConfirmInstallCallback { get; set; }
+
     private static readonly List<string> GroupOrderPriority = new()
     {
         "Net", "Display", "Media", "Bluetooth", "USB", "DiskDrive", "SCSIAdapter", "System"
@@ -44,6 +52,18 @@ public sealed class MainWindowViewModel : ObservableObject
         _matchingEngine = new DriverLens.Core.RankedMatchingEngine();
         _cacheStore = new DriverLens.Data.LocalCacheStore();
         _syncService = new DriverLens.Data.GithubIndexSyncService(_cacheStore);
+        
+        var pnpUtil = new DriverLens.Install.PnpUtilWrapper();
+        _restorePointService = new DriverLens.Install.WmiRestorePointService();
+        _installService = new DriverLens.Install.DriverInstallService(
+            new DriverLens.Install.HttpPackageDownloader(),
+            new DriverLens.Install.ExpandCabExtractor(),
+            new DriverLens.Install.PnpUtilSnapshotService(pnpUtil),
+            _restorePointService,
+            _scanner,
+            pnpUtil);
+
+        UpdateDeviceCommand = new AsyncRelayCommand<DeviceItemViewModel>(ExecuteUpdateDeviceAsync);
 
         _ = LoadDataAsync();
     }
@@ -54,13 +74,19 @@ public sealed class MainWindowViewModel : ObservableObject
         IIndexRepository indexRepository, 
         IMatchingEngine matchingEngine,
         ILocalCacheStore cacheStore,
-        IIndexSyncService syncService)
+        IIndexSyncService syncService,
+        IInstallService installService,
+        IRestorePointService restorePointService)
     {
         _scanner = scanner;
         _indexRepository = indexRepository;
         _matchingEngine = matchingEngine;
         _cacheStore = cacheStore;
         _syncService = syncService;
+        _installService = installService;
+        _restorePointService = restorePointService;
+
+        UpdateDeviceCommand = new AsyncRelayCommand<DeviceItemViewModel>(ExecuteUpdateDeviceAsync);
 
         _ = LoadDataAsync();
     }
@@ -86,7 +112,6 @@ public sealed class MainWindowViewModel : ObservableObject
 
             UpdateDeviceList(devices, candidates);
 
-            // Trigger background sync
             _ = SyncInBackgroundAsync(devices);
         }
         catch (Exception ex)
@@ -124,6 +149,71 @@ public sealed class MainWindowViewModel : ObservableObject
             case SyncResult.NetworkUnavailable:
                 SyncStatusText = "Автономный режим — сервер синхронизации недоступен.";
                 break;
+        }
+    }
+
+    private async Task ExecuteUpdateDeviceAsync(DeviceItemViewModel? item)
+    {
+        if (item == null || item.Result.SelectedCandidate == null) return;
+
+        // 1. Heuristic System Restore check
+        bool restoreDisabled = !await _restorePointService.IsSystemRestoreEnabledHeuristicAsync();
+
+        // 2. Confirmation dialog callback
+        if (ConfirmInstallCallback != null)
+        {
+            bool confirmed = await ConfirmInstallCallback(item, restoreDisabled);
+            if (!confirmed) return;
+        }
+
+        try
+        {
+            item.IsInstalling = true;
+            item.InstallFailed = false;
+            item.InstallSucceeded = false;
+            item.InstallDetails = string.Empty;
+
+            var installResult = await _installService.InstallAsync(
+                item.Device,
+                item.Result.SelectedCandidate,
+                progress =>
+                {
+                    item.InstallProgressText = progress;
+                });
+
+            item.IsInstalling = false;
+            item.InstallProgressText = string.Empty;
+            item.InstallDetails = installResult.Details;
+
+            if (installResult.Result == InstallResult.Success)
+            {
+                item.InstallSucceeded = true;
+                
+                // Refresh specific device in lists
+                var freshDevices = await _scanner.ScanAsync();
+                var freshDevice = freshDevices.FirstOrDefault(d => string.Equals(d.DeviceInstanceId, item.Device.DeviceInstanceId, StringComparison.OrdinalIgnoreCase));
+                if (freshDevice != null)
+                {
+                    var candidates = await _cacheStore.GetCachedCandidatesAsync();
+                    var newMatchResult = _matchingEngine.Match(freshDevice, candidates);
+                    item.UpdateMatchResult(newMatchResult);
+                }
+            }
+            else
+            {
+                item.InstallFailed = true;
+                // Add specific warning detail if restore point creation failed
+                if (!installResult.RestorePointCreated)
+                {
+                    item.InstallDetails = "[Предупреждение: Точка восстановления не создана]\n" + item.InstallDetails;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            item.IsInstalling = false;
+            item.InstallFailed = true;
+            item.InstallDetails = $"Критическая ошибка: {ex.Message}";
         }
     }
 

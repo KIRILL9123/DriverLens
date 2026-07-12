@@ -10,6 +10,7 @@ public sealed class DeviceInfo
     public string? CurrentDriverVersion { get; set; }
     public DateOnly? CurrentDriverDate { get; set; }
     public string? CurrentProvider { get; set; }
+    public string? CurrentInfName { get; set; }
     public bool HasProblem { get; set; }
     public int? ProblemCode { get; set; }
 }

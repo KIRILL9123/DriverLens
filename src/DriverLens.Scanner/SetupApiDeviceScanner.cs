@@ -137,6 +137,7 @@ public sealed class SetupApiDeviceScanner : IDeviceScanner
                     string? currentDriverVersion = null;
                     DateOnly? currentDriverDate = null;
                     string? currentProvider = null;
+                    string? currentInfName = null;
 
                     var hKey = SetupDiOpenDevRegKey(devInfoSet, ref devInfoData, DICS_FLAG_GLOBAL, 0, DIREG_DRV, KEY_READ);
                     if (hKey != IntPtr.Zero && hKey != invalidHandle)
@@ -146,6 +147,7 @@ public sealed class SetupApiDeviceScanner : IDeviceScanner
                         {
                             currentDriverVersion = regKey.GetValue("DriverVersion") as string;
                             currentProvider = regKey.GetValue("ProviderName") as string;
+                            currentInfName = regKey.GetValue("InfPath") as string;
                             var dateStr = regKey.GetValue("DriverDate") as string;
 
                             if (!string.IsNullOrEmpty(dateStr))
@@ -181,6 +183,7 @@ public sealed class SetupApiDeviceScanner : IDeviceScanner
                         CurrentDriverVersion = currentDriverVersion,
                         CurrentDriverDate = currentDriverDate,
                         CurrentProvider = currentProvider,
+                        CurrentInfName = currentInfName,
                         HasProblem = hasProblem,
                         ProblemCode = problemCode
                     });

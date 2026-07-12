@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-07-12
+### Added
+- Multi-step driver install pipeline implementation (`DriverInstallService` in `DriverLens.Install`).
+- Streaming package downloader with on-the-fly SHA-256 validation (`HttpPackageDownloader`).
+- CAB extraction utility using Windows `expand.exe` with single INF requirement constraint (`ExpandCabExtractor`).
+- Snapshot driver backup service using `pnputil /export-driver` and JSON metadata records (`PnpUtilSnapshotService`).
+- System Restore Point WMI integration and registry heuristic state check (`WmiRestorePointService`).
+- JSON Lines operation logging database (`%LOCALAPPDATA%\DriverLens\logs\operations.jsonl`).
+- Published INF path capture support in SetupAPI device scanner.
+- WPF client updates: "Обновить" row actions, step progress reporting, ContentDialog confirmations, and warning notifications.
+- Unit tests for downloader hashes, snapshot record structures, and operation log files.
+
 ## [0.2.0] - 2026-07-12
 ### Added
 - Offline index signing tool (`tools/DriverLens.IndexSigner`).

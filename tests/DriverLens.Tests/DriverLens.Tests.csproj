@@ -1,10 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
@@ -23,10 +22,13 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\DriverLens.Core\DriverLens.Core.csproj" />
     <ProjectReference Include="..\..\src\DriverLens.Data\DriverLens.Data.csproj" />
+    <ProjectReference Include="..\..\src\DriverLens.Install\DriverLens.Install.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <None Include="..\..\fixtures\sample-index.json" Link="fixtures\sample-index.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
 </Project>

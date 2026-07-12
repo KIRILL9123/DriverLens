@@ -15,10 +15,10 @@ Faster, more reliable, more understandable alternative to Snappy Driver Installe
    5. Version/date comparison (System.Version semantics — newer isn't always better; index carries release_date and known-good flags)
    6. Critical device classes (storage, chipset, GPU, network) require stricter confirmation (signed + no open regressions flagged in index)
 5. UI (WPF + WPF-UI, MVVM) — default view: grouped-by-category device list with status badges (up to date / update available / missing / unknown) and one bulk "Update recommended" action. Every row is expandable to Current → Proposed with source and reason — never a black-box single button hiding what changes.
-6. Preflight — before any install: verify admin elevation, verify package hash against index-recorded SHA-256, verify Authenticode signature + certificate chain against .cat, block on mismatch.
-7. Snapshot — `pnputil /export-driver` for the affected device(s) + metadata snapshot (device instance ID, current INF, provider, version, HWID, exported package path) written to snapshot store. WMI System Restore point created as a supplementary (not sole) safety net — app checks whether System Restore is enabled and warns the user explicitly if it's off.
-8. Install — `pnputil /add-driver <inf> /install` for the target device. OEM EXE installers are NOT part of the automated v1 pipeline — flagged as a manual, explicitly-warned mode only (per-vendor silent flags are undocumented/unstable and are the least predictable part of this class of tool).
-9. Verify — confirm device now reports no error code / correct driver version, then write an entry to the operation log (structured, timestamped, includes before/after state).
+6. Preflight — before any install: verify admin elevation, verify package hash against index-recorded SHA-256 (Note: WinVerifyTrust/.cat verification is deferred to Phase 3.5; Phase 3 only verifies SHA-256 against the signed index), block on mismatch.
+7. Snapshot — check if inbox driver (no prior third-party INF) - if so, create snapshot record indicating no prior package. Otherwise, run `pnputil /export-driver` for the current INF path of the device, copy to the snapshot store, and write a `SnapshotRecord` JSON to `%LOCALAPPDATA%\DriverLens\snapshots\<sanitized-id>\<timestamp>.json`. WMI System Restore point is created as a supplementary safety net, checking HKLM registry heuristic first and warning user if disabled.
+8. Install — run `pnputil /add-driver "<infPath>" /install` via `PnpUtilWrapper`, capture exit code and standard outputs.
+9. Verify & Log — confirm device now reports no error code and correct driver version has changed. Regardless of outcome, write a structured entry to `%LOCALAPPDATA%\DriverLens\logs\operations.jsonl`.
 10. Rollback — separate service, not just "hope the restore point works": reinstalls the snapshotted INF, re-triggers device re-enumeration, writes rollback outcome to the log. Available from the UI as a single explicit action tied to a specific past operation.
 
 ## Why WPF + MVVM, not WebView2 + React (v1 decision)
@@ -39,3 +39,7 @@ Faster, more reliable, more understandable alternative to Snappy Driver Installe
 - GitHub repo holds ONLY the signed metadata index — never driver binaries, never arbitrary vendor `.exe` links beyond the recorded official source URL.
 - Every shard is signed with a release private key (kept outside the repo); the client embeds the corresponding public key and refuses to load an unsigned or badly-signed shard.
 - CI on every PR to the index: fetch the file at `source.url`, recompute SHA-256, compare to the claimed value, verify Authenticode signature/publisher, reject on mismatch. This catches a compromised contributor swapping a URL; the release-key signing (kept off GitHub) is meant to contain the harder case of a compromised GitHub admin account.
+
+## Known gaps
+- **No WinVerifyTrust/.cat chain verification yet (planned: Phase 3.5).** Phase 3 verifies package integrity via SHA-256 against the signed index only. This confirms the downloaded file matches what was recorded when the index shard was signed — it does NOT confirm the file's Authenticode signature or certificate chain are valid. Do not distribute this build to other users until Phase 3.5 closes this gap.
+- **No support for nested/multi-INF driver packages.** Driver packages with zero or more than one INF file in CAB extraction are not supported yet; exactly one INF file is expected per CAB package.
