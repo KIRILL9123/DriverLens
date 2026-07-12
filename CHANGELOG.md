@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-07-12
+### Added
+- Offline index signing tool (`tools/DriverLens.IndexSigner`).
+- ECDSA P-256 (SHA-256) signature verification client logic (`SignedIndexVerifier`).
+- SQLite-based database cache store (`LocalCacheStore` in `DriverLens.Data`).
+- Background GitHub repository index synchronization service (`GithubIndexSyncService` with ETag handling and signature validation).
+- Cache-first startup path in WPF client with background synchronization and UI sync status indicator.
+- Unit test coverage for signature verification and background synchronization with HTTP mocks.
+- Signing and verification process documentation (`docs/SIGNING.md`).
+
 ## [0.1.0] - 2026-07-11
 ### Added
 - SetupAPI-based device scanner (`DriverLens.Scanner` library project).

@@ -72,6 +72,13 @@
                     <TextBlock Text="Hardware Scan &amp; Driver Match" FontSize="24" FontWeight="Bold" Foreground="White" />
                     <TextBlock Text="This is a read-only list showing current drivers and matching index candidates. No changes will be made to your system." 
                                FontSize="13" Foreground="#999999" Margin="0,4,0,0" />
+                    
+                    <Border Margin="0,8,0,0" Padding="12,6" CornerRadius="4" Background="#11FFFFFF" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="ArrowSync24" Margin="0,0,8,0" VerticalAlignment="Center" Foreground="#88FFFFFF" />
+                            <TextBlock Text="{Binding SyncStatusText}" FontSize="12" Foreground="#88FFFFFF" VerticalAlignment="Center" FontWeight="Medium" />
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
 
                 <!-- Scrollable list of grouped devices -->

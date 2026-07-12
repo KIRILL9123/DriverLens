@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\DriverLens.Core\DriverLens.Core.csproj" />
+    <ProjectReference Include="..\..\src\DriverLens.Data\DriverLens.Data.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\fixtures\sample-index.json" Link="fixtures\sample-index.json">

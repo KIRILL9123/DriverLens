@@ -6,7 +6,7 @@ Faster, more reliable, more understandable alternative to Snappy Driver Installe
 ## Pipeline
 1. Hardware + Installed Driver Scanner (SetupAPI / ConfigManager) — enumerates devices, current INF, driver version/date, HWID and Compatible ID chains. Runs off the UI thread, target <1s for typical machine.
 2. Local cache (SQLite) — last known-good scan + match results, loaded and rendered immediately on startup before any network call.
-3. Signed driver metadata index (GitHub repo) — sharded JSON by device class/HWID prefix. Never contains actual driver binaries. Each shard signed with a release key (Ed25519); client verifies signature before trusting the shard. Fields per entry: hwids[], compatible_ids[], oem/provider, version, release_date, os.min_build, os.arch[], source.url (official OEM/MS Catalog only), source.sha256, source.authenticode_publisher, risk_level.
+3. Signed driver metadata index (GitHub repo) — sharded JSON by device class/HWID prefix. Never contains actual driver binaries. Each shard signed with a release key (ECDSA P-256 (SHA-256)); client verifies signature before trusting the shard. (Note: Ed25519 is not in the .NET 8 BCL; ECDSA P-256 is used instead — natively supported, no external crypto dependency). Fields per entry: hwids[], compatible_ids[], oem/provider, version, release_date, os.min_build, os.arch[], source.url (official OEM/MS Catalog only), source.sha256, source.authenticode_publisher, risk_level.
 4. Compatibility & Risk Engine — deterministic ranking:
    1. Exact Hardware ID match
    2. Compatible ID (fallback only)

@@ -427,3 +427,10 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+## Dev signing keys — NEVER COMMIT
+devkey.private.pem
+devkey.public.pem
+*.private.pem
+*.public.pem
+

@@ -9,8 +9,8 @@
 - [x] Read-only WPF-UI list: grouped by category, status badges, Current → Proposed expandable detail. No install actions yet.
 
 ## Phase 2 — Signed index + sync
-- Index shard format finalized, Ed25519 signing script, public key embedded in client.
-- SQLite local cache, background sync with ETag/If-Modified-Since, instant-first-paint from cache.
+- [x] Index shard format finalized, ECDSA P-256 signing script, public key embedded in client.
+- [x] SQLite local cache, background sync with ETag/If-Modified-Since, instant-first-paint from cache.
 
 ## Phase 3 — Install pipeline
 - Preflight: admin check, SHA-256 verify, Authenticode/cert-chain verify.
