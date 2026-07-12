@@ -34,14 +34,19 @@ public sealed class ExpandCabExtractor : ICabExtractor
             throw new InvalidOperationException("Failed to start expand.exe process.");
         }
 
-        // Read stdout and stderr asynchronously in the background to prevent stream buffer deadlocks
-        var stdoutTask = process.StandardOutput.ReadToEndAsync();
-        var stderrTask = process.StandardError.ReadToEndAsync();
+        var stdoutBuilder = new System.Text.StringBuilder();
+        var stderrBuilder = new System.Text.StringBuilder();
+
+        process.OutputDataReceived += (s, e) => { if (e.Data != null) stdoutBuilder.AppendLine(e.Data); };
+        process.ErrorDataReceived += (s, e) => { if (e.Data != null) stderrBuilder.AppendLine(e.Data); };
+
+        process.BeginOutputReadLine();
+        process.BeginErrorReadLine();
 
         await process.WaitForExitAsync();
 
-        var stdout = await stdoutTask;
-        var stderr = await stderrTask;
+        var stdout = stdoutBuilder.ToString();
+        var stderr = stderrBuilder.ToString();
         
         if (process.ExitCode != 0)
         {

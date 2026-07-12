@@ -27,13 +27,19 @@ public class PnpUtilWrapper
             throw new InvalidOperationException("Failed to start pnputil.exe process.");
         }
 
-        var stdoutTask = process.StandardOutput.ReadToEndAsync();
-        var stderrTask = process.StandardError.ReadToEndAsync();
+        var stdoutBuilder = new System.Text.StringBuilder();
+        var stderrBuilder = new System.Text.StringBuilder();
+
+        process.OutputDataReceived += (s, e) => { if (e.Data != null) stdoutBuilder.AppendLine(e.Data); };
+        process.ErrorDataReceived += (s, e) => { if (e.Data != null) stderrBuilder.AppendLine(e.Data); };
+
+        process.BeginOutputReadLine();
+        process.BeginErrorReadLine();
 
         await process.WaitForExitAsync();
 
-        var stdout = await stdoutTask;
-        var stderr = await stderrTask;
+        var stdout = stdoutBuilder.ToString();
+        var stderr = stderrBuilder.ToString();
 
         if (process.ExitCode != 0)
         {
@@ -67,13 +73,19 @@ public class PnpUtilWrapper
             throw new InvalidOperationException("Failed to start pnputil.exe process for driver installation.");
         }
 
-        var stdoutTask = process.StandardOutput.ReadToEndAsync();
-        var stderrTask = process.StandardError.ReadToEndAsync();
+        var stdoutBuilder = new System.Text.StringBuilder();
+        var stderrBuilder = new System.Text.StringBuilder();
+
+        process.OutputDataReceived += (s, e) => { if (e.Data != null) stdoutBuilder.AppendLine(e.Data); };
+        process.ErrorDataReceived += (s, e) => { if (e.Data != null) stderrBuilder.AppendLine(e.Data); };
+
+        process.BeginOutputReadLine();
+        process.BeginErrorReadLine();
 
         await process.WaitForExitAsync();
 
-        var stdout = await stdoutTask;
-        var stderr = await stderrTask;
+        var stdout = stdoutBuilder.ToString();
+        var stderr = stderrBuilder.ToString();
         var combined = $"{stdout}\n{stderr}".Trim();
 
         return (process.ExitCode, combined);
