@@ -64,22 +64,6 @@
       },
       "risk_level": "low",
       "known_good": true
-    },
-    {
-      "id": "realtek-bluetooth-test-1.9",
-      "hwids": ["USB\\VID_13D3&PID_3586&REV_0000", "USB\\VID_13D3&PID_3586"],
-      "compatible_ids": [],
-      "provider": "Realtek Semiconductor Corp.",
-      "version": "18.9999.99.99",
-      "release_date": "2026-07-12",
-      "os": { "min_build": 10240, "arch": ["x64"] },
-      "source": {
-        "url": "https://catalog.s.download.windowsupdate.com/d/msdownload/update/driver/drvs/2024/04/c1f14a17-4aed-40ff-85cb-7710d0244f42_4433154fbd9a4a8173ee994d24ee7eb640714562.cab",
-        "sha256": "9b82851cd93e3106938ed03cfe3df48ac52fb3577ad56c167e915ba048f5d4ec",
-        "authenticode_publisher": "Realtek Semiconductor Corp."
-      },
-      "risk_level": "low",
-      "known_good": true
     }
   ]
 }
