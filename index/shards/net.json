@@ -64,6 +64,22 @@
       },
       "risk_level": "low",
       "known_good": true
+    },
+    {
+      "id": "realtek-audio-hdaudio-10ec-0897",
+      "hwids": ["HDAUDIO\\FUNC_01&VEN_10EC&DEV_0897&SUBSYS_1458A194&REV_1004", "HDAUDIO\\FUNC_01&VEN_10EC&DEV_0897&SUBSYS_1458A194"],
+      "compatible_ids": [],
+      "provider": "Realtek Semiconductor Corp.",
+      "version": "6.0.9927.1",
+      "release_date": "2026-02-01",
+      "os": { "min_build": 10240, "arch": ["x64"] },
+      "source": {
+        "url": "https://catalog.s.download.windowsupdate.com/d/msdownload/update/driver/drvs/2026/02/ef03f3ab-da09-48fc-abb9-45a61ffd49c2_821d5b4a1adb592e746b4d05afae7fec6eb85aae.cab",
+        "sha256": "A5ACCFD5A15FE219F76471B2B1C2F669B12E1508E0523905D2ED5D9049106772",
+        "authenticode_publisher": "Microsoft Windows Hardware Compatibility Publisher"
+      },
+      "risk_level": "low",
+      "known_good": true
     }
   ]
 }
