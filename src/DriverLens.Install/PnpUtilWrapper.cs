@@ -14,7 +14,7 @@ public class PnpUtilWrapper
         var psi = new ProcessStartInfo
         {
             FileName = "pnputil.exe",
-            Arguments = $"/export-driver {infName} \"{destDir}\"",
+            Arguments = $"/export-driver \"{infName}\" \"{destDir}\"",
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
