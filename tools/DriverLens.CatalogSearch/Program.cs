@@ -34,13 +34,22 @@ class Program
             {
                 string guid = args[1];
                 string? expectHwid = null;
+                string? version = null;
+                string? releaseDate = null;
 
                 for (int i = 2; i < args.Length; i++)
                 {
                     if (args[i] == "--expect-hwid" && i + 1 < args.Length)
                     {
                         expectHwid = args[i + 1];
-                        break;
+                    }
+                    else if (args[i] == "--version" && i + 1 < args.Length)
+                    {
+                        version = args[i + 1];
+                    }
+                    else if (args[i] == "--release-date" && i + 1 < args.Length)
+                    {
+                        releaseDate = args[i + 1];
                     }
                 }
 
@@ -50,7 +59,7 @@ class Program
                     return 1;
                 }
 
-                await RunResolveAsync(guid, expectHwid);
+                await RunResolveAsync(guid, expectHwid, version, releaseDate);
             }
             else
             {
@@ -72,7 +81,7 @@ class Program
         Console.WriteLine("DriverLens.CatalogSearch — CLI Tool for Microsoft Update Catalog");
         Console.WriteLine("Usage:");
         Console.WriteLine("  Search:  dotnet run --project tools/DriverLens.CatalogSearch -- search \"<query>\"");
-        Console.WriteLine("  Resolve: dotnet run --project tools/DriverLens.CatalogSearch -- resolve <guid> --expect-hwid \"<HWID>\"");
+        Console.WriteLine("  Resolve: dotnet run --project tools/DriverLens.CatalogSearch -- resolve <guid> --expect-hwid \"<HWID>\" [--version \"<version>\"] [--release-date \"<yyyy-MM-dd>\"]");
     }
 
     static async Task RunSearchAsync(string query)
@@ -141,7 +150,7 @@ class Program
         }
     }
 
-    static async Task RunResolveAsync(string guid, string expectHwid)
+    static async Task RunResolveAsync(string guid, string expectHwid, string? version, string? releaseDate)
     {
         Console.WriteLine($"Resolving download URL for GUID: {guid}...");
 
@@ -302,14 +311,21 @@ class Program
             Console.WriteLine($"Authenticode Publisher: {signerCN}");
 
             // Print the ready-to-paste JSON block
-            Console.WriteLine("\n================================================================================");
-            Console.WriteLine("SUGGESTED JSON ENTRY TEMPLATE (Copy and Paste into net.json):");
-            Console.WriteLine("================================================================================");
-            
-            // Format dynamic date
-            string dateStr = DateTime.UtcNow.ToString("yyyy-MM-dd");
-
-            string jsonTemplate = $@"{{
+            if (string.IsNullOrEmpty(version) || string.IsNullOrEmpty(releaseDate))
+            {
+                Console.WriteLine("\n================================================================================");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Missing --version or --release-date. Copy these from the corresponding `search` result line for this GUID and pass them explicitly — this tool never guesses these values.");
+                Console.ResetColor();
+                Console.WriteLine("================================================================================");
+            }
+            else
+            {
+                Console.WriteLine("\n================================================================================");
+                Console.WriteLine("SUGGESTED JSON ENTRY TEMPLATE (Copy and Paste into net.json):");
+                Console.WriteLine("================================================================================");
+                
+                string jsonTemplate = $@"{{
   ""id"": ""realtek-audio-hdaudio-{guid.Substring(0, 8)}"",
   ""hwids"": [
     ""{expectHwid}""
@@ -317,8 +333,8 @@ class Program
   ],
   ""compatible_ids"": [],
   ""provider"": ""Realtek Semiconductor Corp."",
-  ""version"": ""TODO_CHECK_CATALOG_VERSION"",
-  ""release_date"": ""{dateStr}"",
+  ""version"": ""{version}"",
+  ""release_date"": ""{releaseDate}"",
   ""os"": {{
     ""min_build"": 10240,
     ""arch"": [""x64""]
@@ -331,8 +347,9 @@ class Program
   ""risk_level"": ""low"",
   ""known_good"": true
 }}";
-            Console.WriteLine(jsonTemplate);
-            Console.WriteLine("================================================================================");
+                Console.WriteLine(jsonTemplate);
+                Console.WriteLine("================================================================================");
+            }
         }
         finally
         {

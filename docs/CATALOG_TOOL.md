@@ -24,13 +24,15 @@ This returns a numbered list of updates including their title, version, products
 To resolve the direct download URL, download the package, verify that it actually supports a specific Hardware ID, check the Authenticode signature, and print a template for `net.json`:
 
 ```bash
-dotnet run --project tools/DriverLens.CatalogSearch -- resolve <guid> --expect-hwid "<HWID>"
+dotnet run --project tools/DriverLens.CatalogSearch -- resolve <guid> --expect-hwid "<HWID>" --version "<version>" --release-date "<yyyy-MM-dd>"
 ```
 
 Example:
 ```bash
-dotnet run --project tools/DriverLens.CatalogSearch -- resolve 7cd3e302-9a0f-453b-acee-01890923dd97 --expect-hwid "HDAUDIO\FUNC_01&VEN_10EC&DEV_0897"
+dotnet run --project tools/DriverLens.CatalogSearch -- resolve 7cd3e302-9a0f-453b-acee-01890923dd97 --expect-hwid "HDAUDIO\FUNC_01&VEN_10EC&DEV_0897" --version "6.0.9927.1" --release-date "2025-12-15"
 ```
+
+If the `--version` or `--release-date` parameters are omitted, the tool will still perform the full verification (download, extraction, HWID checks, and signature checks) but will refuse to print the JSON template block.
 
 ## Technical Notes
 
