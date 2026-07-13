@@ -11,6 +11,7 @@
 ## Phase 2 — Signed index + sync
 - [x] Index shard format finalized, ECDSA P-256 signing script, public key embedded in client.
 - [x] SQLite local cache, background sync with ETag/If-Modified-Since, instant-first-paint from cache.
+- [x] CatalogSearch dev CLI tool for automated catalog lookup, verification, and net.json JSON template generation.
 
 ## Phase 3 — Install pipeline
 - [x] Preflight: admin check, SHA-256 verify (Authenticode/cert-chain verify deferred to Phase 3.5).

@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{07C2787E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DriverLens.IndexSigner", "tools\DriverLens.IndexSigner\DriverLens.IndexSigner.csproj", "{690452FC-8021-4F04-9A5F-978538C91CB5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DriverLens.CatalogSearch", "tools\DriverLens.CatalogSearch\DriverLens.CatalogSearch.csproj", "{8B188A31-F5D9-4845-9E53-310DA2C38CB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +117,18 @@ Global
 		{690452FC-8021-4F04-9A5F-978538C91CB5}.Release|x64.Build.0 = Release|Any CPU
 		{690452FC-8021-4F04-9A5F-978538C91CB5}.Release|x86.ActiveCfg = Release|Any CPU
 		{690452FC-8021-4F04-9A5F-978538C91CB5}.Release|x86.Build.0 = Release|Any CPU
+		{8B188A31-F5D9-4845-9E53-310DA2C38CB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B188A31-F5D9-4845-9E53-310DA2C38CB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B188A31-F5D9-4845-9E53-310DA2C38CB2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8B188A31-F5D9-4845-9E53-310DA2C38CB2}.Debug|x64.Build.0 = Debug|Any CPU
+		{8B188A31-F5D9-4845-9E53-310DA2C38CB2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8B188A31-F5D9-4845-9E53-310DA2C38CB2}.Debug|x86.Build.0 = Debug|Any CPU
+		{8B188A31-F5D9-4845-9E53-310DA2C38CB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B188A31-F5D9-4845-9E53-310DA2C38CB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B188A31-F5D9-4845-9E53-310DA2C38CB2}.Release|x64.ActiveCfg = Release|Any CPU
+		{8B188A31-F5D9-4845-9E53-310DA2C38CB2}.Release|x64.Build.0 = Release|Any CPU
+		{8B188A31-F5D9-4845-9E53-310DA2C38CB2}.Release|x86.ActiveCfg = Release|Any CPU
+		{8B188A31-F5D9-4845-9E53-310DA2C38CB2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -127,5 +141,6 @@ Global
 		{4ED88431-151D-41A8-B040-423678F76695} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{580E1AEC-9007-4451-88F2-EDF8ECCC08DC} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{690452FC-8021-4F04-9A5F-978538C91CB5} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
+		{8B188A31-F5D9-4845-9E53-310DA2C38CB2} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 	EndGlobalSection
 EndGlobal
